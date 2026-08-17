@@ -1,2 +1,3 @@
 # SQL-Practice
-A collection of SQL exercises I completed while improving my SQL and database querying skills.
+A collection of SQL exercises I completed while improving my SQL and database querying skills.The exercises cover fundamental SQL concepts, including:
+SELECT , WHERE , LİKE , BETWEEN , JOIN , GROUP BY , AGGREGATE FUNCTIONS ... 
