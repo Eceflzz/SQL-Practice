@@ -1,0 +1,132 @@
+-- 1. Create a VIEW for completed orders.
+CREATE OR REPLACE VIEW create_view_completed_order AS
+SELECT
+    c.full_name,
+    p.product_name,
+    o.order_date,
+    o.quantity,
+    p.price,
+    o.status
+FROM orders AS o
+JOIN customers AS c
+    ON o.customer_id = c.customer_id
+JOIN products AS p
+    ON o.product_id = p.product_id
+WHERE o.status = 'completed';
+
+
+-- 2. Create a VIEW for electronics products.
+CREATE OR REPLACE VIEW create_view_electronics_products AS
+SELECT
+    product_name,
+    category
+FROM products
+WHERE category = 'Electronics';
+
+
+-- 3. Calculate the total spending per customer.
+SELECT
+    c.full_name,
+    SUM(p.price * o.quantity) AS total_spending
+FROM orders AS o
+JOIN customers AS c
+    ON o.customer_id = c.customer_id
+JOIN products AS p
+    ON o.product_id = p.product_id
+GROUP BY c.customer_id, c.full_name;
+
+
+-- 4. Display order details with total price.
+SELECT
+    o.order_id,
+    c.full_name,
+    p.product_name,
+    p.price * o.quantity AS total_price
+FROM orders AS o
+JOIN products AS p
+    ON p.product_id = o.product_id
+JOIN customers AS c
+    ON c.customer_id = o.customer_id;
+
+
+-- 5. Find customers who purchased the most expensive product.
+SELECT
+    c.full_name
+FROM customers AS c
+JOIN orders AS o
+    ON c.customer_id = o.customer_id
+JOIN products AS p
+    ON p.product_id = o.product_id
+WHERE p.price = (
+    SELECT MAX(price)
+    FROM products
+);
+
+
+-- 6. Convert order statuses into descriptions.
+SELECT
+    order_id,
+    status,
+    CASE
+        WHEN status = 'completed' THEN 'Completed'
+        WHEN status = 'cancelled' THEN 'Cancelled'
+    END AS status_description
+FROM orders;
+
+
+-- 7. Find products priced above the average.
+SELECT
+    product_name,
+    price
+FROM products
+WHERE price > (
+    SELECT AVG(price)
+    FROM products
+);
+
+
+-- 8. Categorize customers based on their order count.
+SELECT
+    c.full_name,
+    CASE
+        WHEN COUNT(o.order_id) > 5 THEN 'Loyal Customer'
+        WHEN COUNT(o.order_id) BETWEEN 2 AND 5 THEN 'Intermediate'
+        ELSE 'New Customer'
+    END AS customer_category
+FROM customers AS c
+JOIN orders AS o
+    ON c.customer_id = o.customer_id
+GROUP BY c.customer_id, c.full_name;
+
+
+-- 9. Find customers who placed orders within the last 30 days.
+SELECT DISTINCT
+    c.full_name
+FROM orders AS o
+JOIN customers AS c
+    ON o.customer_id = c.customer_id
+WHERE o.order_date >= CURRENT_DATE - INTERVAL '30 days';
+
+
+-- 10. Find the most ordered product.
+SELECT
+    p.product_name,
+    COUNT(*) AS total_orders
+FROM orders AS o
+JOIN products AS p
+    ON p.product_id = o.product_id
+GROUP BY p.product_id, p.product_name
+ORDER BY total_orders DESC
+LIMIT 1;
+
+
+-- 11. Categorize products based on their prices.
+SELECT
+    product_name,
+    price,
+    CASE
+        WHEN price > 1000 THEN 'Expensive'
+        WHEN price BETWEEN 500 AND 1000 THEN 'Medium'
+        ELSE 'Cheap'
+    END AS price_category
+FROM products;
