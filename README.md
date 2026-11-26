@@ -1,7 +1,7 @@
 # SQL-Practice
-A collection of SQL exercises I completed while improving my SQL and database querying skills.
-The exercises cover fundamental SQL concepts, including:
 
+This repository contains SQL exercises I worked on to improve my SQL skills and practice writing queries.
+The exercises cover topics such as:
 - SELECT
 - WHERE
 - LIKE
@@ -10,5 +10,8 @@ The exercises cover fundamental SQL concepts, including:
 - GROUP BY
 - Aggregate Functions
 - ORDER BY
+- CASE
+- Subqueries
+- VIEWS
 
-These exercises were completed using an existing database provided for practice. The database itself is not my own project; this repository focuses on the SQL queries I wrote and the concepts I practiced.
+I used an existing practice database and focused on writing and improving SQL queries. The database was provided for practice, and the queries in this repository are my own work.
